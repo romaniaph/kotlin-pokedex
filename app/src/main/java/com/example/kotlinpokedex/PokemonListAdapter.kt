@@ -38,9 +38,4 @@ class PokemonListAdapter(private var pokemons: List<Pokedex>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(pokemons[position])
     }
-
-    fun updateItems(list: List<Pokedex>) {
-        pokemons = list
-        notifyDataSetChanged()
-    }
 }
