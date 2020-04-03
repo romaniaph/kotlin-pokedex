@@ -15,16 +15,21 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var reciclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private var offsetGlobal: Int = 1
+    private val pokemonArrayList = arrayListOf<Pokedex>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         getPokemons(offsetGlobal)
+
+        floating_button.setOnClickListener {
+            getPokemons(offsetGlobal)
+        }
     }
 
     private fun getPokemons(offset: Int) {
@@ -39,8 +44,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<List<Pokedex>>, response: Response<List<Pokedex>>) {
-
-                setRecycler(response.body()!!)
+                pokemonArrayList += response.body()!!
+                setRecycler(pokemonArrayList)
 
                 offsetGlobal = offset + 20
             }
@@ -53,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         pokemonList.apply {
             setHasFixedSize(true)
 
-            progressBar.visibility = View.GONE
+            progressBar.visibility = View.INVISIBLE
 
             //seta um gerenciador de layout
             //no caso, coloca como lineat
