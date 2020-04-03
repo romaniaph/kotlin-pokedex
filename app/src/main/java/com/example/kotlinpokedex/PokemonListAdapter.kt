@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.list_item.view.*
 
 
-class PokemonListAdapter(private val pokemons: List<Pokedex>) :
+class PokemonListAdapter(private var pokemons: List<Pokedex>) :
     RecyclerView.Adapter<PokemonListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,4 +39,8 @@ class PokemonListAdapter(private val pokemons: List<Pokedex>) :
         holder.bind(pokemons[position])
     }
 
+    fun updateItems(list: List<Pokedex>) {
+        pokemons = list
+        notifyDataSetChanged()
+    }
 }

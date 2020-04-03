@@ -1,10 +1,10 @@
 package com.example.kotlinpokedex
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log.d
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,12 +14,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
     private var offsetGlobal: Int = 1
     private val pokemonArrayList = arrayListOf<Pokedex>()
+    val pokemonAdapter = PokemonListAdapter(pokemonArrayList)
+
+    val api = RetroFitFactory().retrofitService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +27,30 @@ class MainActivity : AppCompatActivity() {
         getPokemons(offsetGlobal)
 
         floating_button.setOnClickListener {
-            getPokemons(offsetGlobal)
+            addPokemons(offsetGlobal)
         }
     }
 
+    private fun addPokemons(offset: Int) {
+        progressBar.visibility = View.VISIBLE
+
+        api.getPokemons(offset.toString()).enqueue(object : Callback<List<Pokedex>> {
+
+            override fun onFailure(call: Call<List<Pokedex>>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Error, try again, please", Toast.LENGTH_LONG).show()
+                progressBar.visibility = View.INVISIBLE
+            }
+
+            override fun onResponse(call: Call<List<Pokedex>>, response: Response<List<Pokedex>>) {
+                pokemonArrayList!!.addAll(response.body()!!)
+                offsetGlobal = offset + 21
+                pokemonAdapter.notifyDataSetChanged()
+                progressBar.visibility = View.INVISIBLE
+            }
+        })
+    }
+
     private fun getPokemons(offset: Int) {
-        val api = RetroFitFactory().retrofitService()
         progressBar.visibility = View.VISIBLE
 
         api.getPokemons(offset.toString()).enqueue(object : Callback<List<Pokedex>> {
@@ -44,21 +61,20 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<List<Pokedex>>, response: Response<List<Pokedex>>) {
+                var start = pokemonArrayList.size
                 pokemonArrayList += response.body()!!
-                setRecycler(pokemonArrayList)
-
-                offsetGlobal = offset + 20
+                setRecycler(response.body()!!, start, pokemonArrayList.size)
+                offsetGlobal = offset + 21
             }
         })
     }
 
 
-    private fun setRecycler(pokemon: List<Pokedex>) {
+    private fun setRecycler(pokemon: List<Pokedex>, start: Int, count: Int) {
+        progressBar.visibility = View.INVISIBLE
 
         pokemonList.apply {
             setHasFixedSize(true)
-
-            progressBar.visibility = View.INVISIBLE
 
             //seta um gerenciador de layout
             //no caso, coloca como lineat
@@ -66,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
             //seta um adaptador de layout
             //o adaptador que vai gerenciar as views la no recycler
-            adapter = PokemonListAdapter(pokemon)
+            adapter = pokemonAdapter
         }
     }
 }
