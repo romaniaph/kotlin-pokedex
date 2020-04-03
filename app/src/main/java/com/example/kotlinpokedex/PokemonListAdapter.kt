@@ -15,7 +15,7 @@ class PokemonListAdapter(private val pokemons: List<Pokedex>) :
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //manipulador de pokémon -> ids do card
         fun bind(pokemon: Pokedex) {
-            itemView.name.text = pokemon.name.toString()
+            itemView.name.text = pokemon.name.toString().toUpperCase()
             itemView.idtext.text = "#${pokemon.id.toString()}"
 
             Glide.with(itemView).load(pokemon?.image.toString()).into(itemView.image)

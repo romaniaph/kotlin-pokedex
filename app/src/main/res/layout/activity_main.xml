@@ -46,7 +46,7 @@
         android:layout_margin="20dp"
         app:backgroundTint="@color/azul_pokemon"
         app:borderWidth="0dp"
-        app:srcCompat="@drawable/ic_search_black_24dp"
+        app:srcCompat="@drawable/ic_add_black_24dp"
         />
 
     <ProgressBar
@@ -58,6 +58,6 @@
         android:indeterminate="true"
         android:indeterminateTint="@color/pokemon_vermelho"
         android:indeterminateTintMode="src_atop"
-        android:visibility="visible" />
+        />
 
 </RelativeLayout>

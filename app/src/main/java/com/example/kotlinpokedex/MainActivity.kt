@@ -1,7 +1,5 @@
 package com.example.kotlinpokedex
 
-import android.content.Context
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log.d
@@ -20,15 +18,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var reciclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private var offsetGlobal: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//                    Glide.with(this@MainActivity).load(Pokemon?.image.toString()).into(imageView)
 
+        getPokemons(offsetGlobal)
+    }
+
+    private fun getPokemons(offset: Int) {
         val api = RetroFitFactory().retrofitService()
+        progressBar.visibility = View.VISIBLE
 
-        val pokemons = api.getPokemons("1").enqueue(object : Callback<List<Pokedex>> {
+        api.getPokemons(offset.toString()).enqueue(object : Callback<List<Pokedex>> {
 
             override fun onFailure(call: Call<List<Pokedex>>, t: Throwable) {
                 Toast.makeText(this@MainActivity, "PORRRAAA", Toast.LENGTH_LONG).show()
@@ -36,27 +39,29 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<List<Pokedex>>, response: Response<List<Pokedex>>) {
-                var progress = this@MainActivity.findViewById<ProgressBar>(R.id.progressBar)
 
-                progress.isIndeterminate = false
                 setRecycler(response.body()!!)
-                progress.visibility = View.GONE
+
+                offsetGlobal = offset + 20
             }
         })
     }
 
 
-    fun setRecycler(pokemons: List<Pokedex>) {
-
+    private fun setRecycler(pokemon: List<Pokedex>) {
 
         pokemonList.apply {
             setHasFixedSize(true)
 
+            progressBar.visibility = View.GONE
+
             //seta um gerenciador de layout
+            //no caso, coloca como lineat
             layoutManager = LinearLayoutManager(this@MainActivity)
 
             //seta um adaptador de layout
-            adapter = PokemonListAdapter(pokemons)
+            //o adaptador que vai gerenciar as views la no recycler
+            adapter = PokemonListAdapter(pokemon)
         }
     }
 }
