@@ -29,33 +29,32 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@id/appbar"
         android:id="@+id/pokemonList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/appbar"
+        android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/list_item"
-        />
+        tools:listitem="@layout/list_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="30dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"
+        android:layout_marginRight="70dp"
         app:backgroundTint="@color/azul_pokemon"
         app:borderWidth="0dp"
-        app:srcCompat="@drawable/ic_add_black_24dp"
-        />
+        app:srcCompat="@drawable/ic_add_black_24dp" />
 
     <ProgressBar
-        android:background="@drawable/circle_icon_item"
-        android:layout_centerInParent="true"
         android:id="@+id/progressBar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/circle_icon_item"
         android:indeterminate="true"
         android:indeterminateTint="@color/pokemon_vermelho"
         android:indeterminateTintMode="src_atop" />

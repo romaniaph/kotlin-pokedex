@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     private var offsetGlobal: Int = 1
     private val pokemonArrayList = arrayListOf<Pokedex>()
     val pokemonAdapter = PokemonListAdapter(pokemonArrayList)
-
+    var loading: Boolean = false
     val api = RetroFitFactory().retrofitService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,29 +25,52 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         getPokemons(offsetGlobal)
+        setScrollRecyclerView()
+    }
 
-        floating_button.setOnClickListener {
-            addPokemons(offsetGlobal)
+    private fun setScrollRecyclerView() {
+        val scrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if (!recyclerView.canScrollVertically(1)) {
+                    addPokemons(offsetGlobal)
+                }
+            }
         }
+
+        pokemonList.addOnScrollListener(scrollListener)
+
     }
 
     private fun addPokemons(offset: Int) {
         progressBar.visibility = View.VISIBLE
 
-        api.getPokemons(offset.toString()).enqueue(object : Callback<List<Pokedex>> {
+        if (!loading) {
+            loading = true
+            api.getPokemons(offset.toString()).enqueue(object : Callback<List<Pokedex>> {
 
-            override fun onFailure(call: Call<List<Pokedex>>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Error, try again, please", Toast.LENGTH_LONG).show()
-                progressBar.visibility = View.INVISIBLE
-            }
+                override fun onFailure(call: Call<List<Pokedex>>, t: Throwable) {
+                    Toast.makeText(this@MainActivity, "Error, try again, please", Toast.LENGTH_LONG)
+                        .show()
+                    progressBar.visibility = View.INVISIBLE
+                    loading = false
+                }
 
-            override fun onResponse(call: Call<List<Pokedex>>, response: Response<List<Pokedex>>) {
-                pokemonArrayList!!.addAll(response.body()!!)
-                offsetGlobal = offset + 21
-                pokemonAdapter.notifyDataSetChanged()
-                progressBar.visibility = View.INVISIBLE
-            }
-        })
+                override fun onResponse(
+                    call: Call<List<Pokedex>>,
+                    response: Response<List<Pokedex>>
+                ) {
+                    pokemonArrayList!!.addAll(response.body()!!)
+                    Toast.makeText(this@MainActivity, "Loading more pokémons...", Toast.LENGTH_LONG)
+                        .show()
+                    offsetGlobal = offset + 21
+                    pokemonAdapter.notifyDataSetChanged()
+                    loading = false
+                    progressBar.visibility = View.INVISIBLE
+                }
+            })
+        }
     }
 
     private fun getPokemons(offset: Int) {
