@@ -8,9 +8,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RetroFitFactory {
     val URL: String = "https://react-pokedex-romaniaph.herokuapp.com"
 
-    val retrofitFactory = Retrofit.Builder()
+    //configurações
+    val retrofitFactory = Retrofit.Builder() //construtor
         .baseUrl(URL)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create()) //convertor pra Gson
         .build()
 
     //cria o serviço juntando com a classe RetroFitService (que tem os métodos e endpoints já predefinidos)

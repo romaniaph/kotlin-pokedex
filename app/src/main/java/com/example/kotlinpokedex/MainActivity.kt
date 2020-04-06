@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         getPokemons(offsetGlobal)
         setScrollRecyclerView()
+
     }
 
     private fun setScrollRecyclerView() {

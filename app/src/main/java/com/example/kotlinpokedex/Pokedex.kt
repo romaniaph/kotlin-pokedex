@@ -10,6 +10,7 @@ data class Pokedex (
     @SerializedName("width") val width: Double,
     @SerializedName("image") val image: String,
     @SerializedName("imageShiny") val imageShiny: String,
+    @SerializedName("imageshiny") val imageshiny: String,
     @SerializedName("types") val types: List<Any>,
     @SerializedName("games") val games: List<Any>,
     @SerializedName("moves") val moves: List<Any>
