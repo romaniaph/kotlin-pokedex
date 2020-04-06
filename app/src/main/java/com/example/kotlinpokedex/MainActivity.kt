@@ -1,5 +1,6 @@
 package com.example.kotlinpokedex
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,6 +28,15 @@ class MainActivity : AppCompatActivity() {
         getPokemons(offsetGlobal)
         setScrollRecyclerView()
 
+    }
+
+    fun searchPokemon(view: View) {
+        val bundle: Bundle = Bundle()
+        bundle.putString("id", search_bar.text.toString().trim())
+        val intent: Intent = Intent(this,  pokemon::class.java)
+        intent.putExtras(bundle)
+        startActivity(intent)
+        search_bar.text.clear()
     }
 
     private fun setScrollRecyclerView() {

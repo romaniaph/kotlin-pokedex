@@ -50,8 +50,13 @@ class pokemon : AppCompatActivity() {
 
         ImageNormal.setOnClickListener {
             if(!shiny) {
+                Glide.with(this).load(pokemon.imageshiny).into(ImageNormal)
+            }
+            else
+            {
                 Glide.with(this).load(pokemon.image).into(ImageNormal)
             }
+            shiny = !shiny
         }
 
         Glide.with(this).load(pokemon.image).into(ImageNormal)
