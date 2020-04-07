@@ -1,7 +1,6 @@
 package com.example.kotlinpokedex
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log.d
@@ -27,13 +26,12 @@ class MainActivity : AppCompatActivity() {
 
         getPokemons(offsetGlobal)
         setScrollRecyclerView()
-
     }
 
     fun searchPokemon(view: View) {
         val bundle: Bundle = Bundle()
         bundle.putString("id", search_bar.text.toString().trim())
-        val intent: Intent = Intent(this,  pokemon::class.java)
+        val intent: Intent = Intent(this,  PokemonActivity::class.java)
         intent.putExtras(bundle)
         startActivity(intent)
         search_bar.text.clear()
@@ -62,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             api.getPokemons(offset.toString()).enqueue(object : Callback<List<Pokedex>> {
 
                 override fun onFailure(call: Call<List<Pokedex>>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, "Error, try again, please", Toast.LENGTH_LONG)
+                    Toast.makeText(this@MainActivity, "Loading... Please, wait", Toast.LENGTH_LONG)
                         .show()
                     progressBar.visibility = View.INVISIBLE
                     loading = false
@@ -90,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         api.getPokemons(offset.toString()).enqueue(object : Callback<List<Pokedex>> {
 
             override fun onFailure(call: Call<List<Pokedex>>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "PORRRAAA", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity, "Loading... Please, wait", Toast.LENGTH_LONG).show()
                 d("n foi", t.toString())
             }
 

@@ -1,23 +1,16 @@
 package com.example.kotlinpokedex
 
-import android.content.Intent
-import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log.d
 import android.view.View
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.core.os.bundleOf
+import android.widget.*
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_pokemon.*
-import kotlinx.android.synthetic.main.list_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class pokemon : AppCompatActivity() {
+class PokemonActivity : AppCompatActivity() {
     val api = RetroFitFactory().retrofitService()
     lateinit var idPokemon: String
     var shiny: Boolean = false
@@ -34,17 +27,37 @@ class pokemon : AppCompatActivity() {
     private fun searchPokemon() {
         api.getPokemon(idPokemon).enqueue(object : Callback<Pokedex> {
             override fun onFailure(call: Call<Pokedex>, t: Throwable) {
-                TODO("Not yet implemented")
+                notFound()
             }
 
             override fun onResponse(call: Call<Pokedex>, response: Response<Pokedex>) {
-                loadPokemon(response.body()!!)
+                if (response.body() != null) {
+                    loadPokemon(response.body()!!)
+                }
+                else {
+                    notFound()
+                }
             }
         })
     }
 
+    private fun notFound() {
+        val imageNotFound: ImageView = findViewById(R.id.notFoundPikachu)
+        imageNotFound.visibility = View.VISIBLE
+
+        Glide.with(this)
+            .load("https://cdn.lowgif.com/full/379453c527825283-pokemon-what-gif-find-share-on-giphy.gif")
+            .into(imageNotFound)
+
+        Toast.makeText(this, "Pokemon not found! Please, search again...", Toast.LENGTH_LONG).show()
+        progressBarPokemon.visibility = View.GONE
+    }
+
     private fun loadPokemon(pokemon: Pokedex) {
+
         namePokemon.text = "#${pokemon.id.toString()} ${pokemon.name.toString()}"
+        width.text = "Weight: ${pokemon.weight.toString()}hg"
+        height.text = "Height: ${pokemon.height.toString()}dm"
 
         val ImageNormal: ImageView = findViewById(R.id.imageNormal)
 
@@ -59,8 +72,14 @@ class pokemon : AppCompatActivity() {
             shiny = !shiny
         }
 
+        val adapter = ArrayAdapter<String>(this, R.layout.list_item, pokemon.abilities.map { it.ability.toString() })
+
+        val listView = findViewById<ListView>(R.id.abilities_list)
+        listView.adapter = adapter
+
         Glide.with(this).load(pokemon.image).into(ImageNormal)
         ImageNormal.visibility = View.VISIBLE
+        abilities.visibility = View.VISIBLE
         progressBarPokemon.visibility = View.GONE
     }
 }

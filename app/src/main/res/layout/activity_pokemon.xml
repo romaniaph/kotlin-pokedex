@@ -15,9 +15,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/azul_pokemon"
-            android:outlineSpotShadowColor="@android:color/transparent"
-            android:outlineAmbientShadowColor="@android:color/transparent">
+            android:background="@color/azul_pokemon">
 
             <ImageView
                 android:id="@+id/app_bar_image"
@@ -32,58 +30,146 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/appbar"
-        android:layout_margin="5dp"
-        android:background="@color/pokemon_vermelho">
+        android:fillViewport="true">
 
-        <TextView
-            android:id="@+id/namePokemon"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@android:color/white"
-            android:fontFamily="@font/roboto_bold"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="Pikachu" />
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@color/pokemon_vermelho">
+
+            <TextView
+                android:id="@+id/namePokemon"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="#eeeeee"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:text="Pikachu" />
 
 
-        <ImageView
-            android:id="@+id/imageNormal"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/circle_icon_item"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/namePokemon"
-            app:layout_constraintVertical_bias="0.02"
-            tools:src="@mipmap/pikachu_foreground"
-            tools:visibility="visible" />
+            <ImageView
+                android:id="@+id/notFoundPikachu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/not_found_image"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/namePokemon"
+                app:layout_constraintVertical_bias="0.8"
+                tools:visibility="visible" />
 
-        <ProgressBar
-            tools:visibility="gone"
-            android:id="@+id/progressBarPokemon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/circle_icon_item"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/pokemon_vermelho"
-            android:indeterminateTintMode="src_atop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/imageNormal"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/circle_icon_item"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_type"
+                app:layout_constraintVertical_bias="0.015"
+                tools:src="@mipmap/pikachu_foreground"
+                tools:visibility="visible"
+                android:contentDescription="@string/pokemon_image" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ProgressBar
+                android:id="@+id/progressBarPokemon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/circle_icon_item"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/pokemon_vermelho"
+                android:indeterminateTintMode="src_atop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
+
+            <ListView
+                android:id="@+id/list_type"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/namePokemon"
+                app:layout_constraintVertical_bias="0.0"
+                tools:listitem="@layout/list_item" />
+
+            <TextView
+                android:id="@+id/width"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_type"
+                app:layout_constraintVertical_bias="0.32999998" />
+
+            <TextView
+                android:id="@+id/abilities"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/abilities"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_type"
+                app:layout_constraintVertical_bias="0.439" />
+
+            <TextView
+                android:id="@+id/height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_type"
+                app:layout_constraintVertical_bias="0.27" />
+
+            <ListView
+                android:id="@+id/abilities_list"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/abilities"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
 </RelativeLayout>

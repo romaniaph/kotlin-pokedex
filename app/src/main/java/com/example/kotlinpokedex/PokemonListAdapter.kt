@@ -5,12 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.list_item.view.*
+import kotlinx.android.synthetic.main.list_item_pokemon.view.*
 
 // a classe recebe a lista de pokémons e extende o adapter do RecyclerView
 class PokemonListAdapter(private var pokemons: List<Pokedex>) :
@@ -29,7 +26,7 @@ class PokemonListAdapter(private var pokemons: List<Pokedex>) :
             itemView.setOnClickListener {
                 val bundle: Bundle = Bundle()
                 bundle.putString("id", pokemon.id.toString())
-                val intent: Intent = Intent(context,  com.example.kotlinpokedex.pokemon::class.java)
+                val intent: Intent = Intent(context,  com.example.kotlinpokedex.PokemonActivity::class.java)
                 intent.putExtras(bundle)
                 context.startActivity(intent)
             }
@@ -39,7 +36,7 @@ class PokemonListAdapter(private var pokemons: List<Pokedex>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         //infla com o carditem criado
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_pokemon, parent, false)
 
         //retorna essa view
         return ViewHolder(view)
