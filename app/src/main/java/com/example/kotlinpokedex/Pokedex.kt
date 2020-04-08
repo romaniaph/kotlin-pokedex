@@ -13,5 +13,5 @@ data class Pokedex (
     @SerializedName("imageshiny") val imageshiny: String,
     @SerializedName("types") val types: List<Type>,
     @SerializedName("games") val games: List<Game>,
-    @SerializedName("moves") val moves: List<Any>
+    @SerializedName("moves") val moves: List<Move>
 )

@@ -1,9 +1,15 @@
 package com.example.kotlinpokedex
 
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.children
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_pokemon.*
 import retrofit2.Call
@@ -21,6 +27,12 @@ class PokemonActivity : AppCompatActivity() {
 
         //pega o id do pokémon do bundle
         idPokemon = getIntent().getStringExtra("id")
+
+        if (idPokemon == "melo") {
+            idPokemon = "54"
+            Toast.makeText(this, "Salve melokkkkkkkk", Toast.LENGTH_LONG).show()
+        }
+
         searchPokemon()
     }
 
@@ -53,6 +65,16 @@ class PokemonActivity : AppCompatActivity() {
         progressBarPokemon.visibility = View.GONE
     }
 
+    private fun setListViews(abilities: List<Ability>, moves: List<Move>) {
+        val adapterAbilities = ArrayAdapter<String>(this, R.layout.list_item, abilities.map { it.ability.toString() })
+        val listViewAbilities = findViewById<ListView>(R.id.abilities_list)
+        listViewAbilities.adapter = adapterAbilities
+
+        val adapterMoves = ArrayAdapter<String>(this, R.layout.list_item, moves.map { it.move.toString() })
+        val listViewMoves = findViewById<ListView>(R.id.moves_list)
+        listViewMoves.adapter = adapterMoves
+    }
+
     private fun loadPokemon(pokemon: Pokedex) {
 
         namePokemon.text = "#${pokemon.id.toString()} ${pokemon.name.toString()}"
@@ -72,14 +94,18 @@ class PokemonActivity : AppCompatActivity() {
             shiny = !shiny
         }
 
-        val adapter = ArrayAdapter<String>(this, R.layout.list_item, pokemon.abilities.map { it.ability.toString() })
+        list_type.apply {
+            setHasFixedSize(true)
+            adapter = TypeListAdapter(pokemon.types)
+            layoutManager = LinearLayoutManager(this@PokemonActivity, LinearLayoutManager.HORIZONTAL, false)
+        }
 
-        val listView = findViewById<ListView>(R.id.abilities_list)
-        listView.adapter = adapter
+        setListViews(pokemon.abilities, pokemon.moves)
 
         Glide.with(this).load(pokemon.image).into(ImageNormal)
         ImageNormal.visibility = View.VISIBLE
         abilities.visibility = View.VISIBLE
+        moves.visibility = View.VISIBLE
         progressBarPokemon.visibility = View.GONE
     }
 }

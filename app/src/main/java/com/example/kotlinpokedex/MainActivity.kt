@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     fun searchPokemon(view: View) {
         val bundle: Bundle = Bundle()
-        bundle.putString("id", search_bar.text.toString().trim())
+        bundle.putString("id", search_bar.text.toString().toLowerCase().trim())
         val intent: Intent = Intent(this,  PokemonActivity::class.java)
         intent.putExtras(bundle)
         startActivity(intent)
