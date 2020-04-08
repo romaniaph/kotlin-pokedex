@@ -5,7 +5,7 @@
  ## How works?
  - The main page contains a list of pokémons and a search bar. 
  - You can navigate to pokemon detail clicking on it or searching by name/id.
- - This project have a web client made with ReactJS, [see here](https://pedro-pokedex.netlify.com)
+ - This project have a web client made with ReactJS, [see here](https://github.com/romaniaph/react-pokedex-client)
  - You can see the back-end made with NodeJS [here](https://github.com/romaniaph/react-pokedex-server)
 
   ## Features: 
