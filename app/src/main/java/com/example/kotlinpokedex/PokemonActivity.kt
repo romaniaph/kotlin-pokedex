@@ -1,5 +1,7 @@
 package com.example.kotlinpokedex
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,9 +19,18 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PokemonActivity : AppCompatActivity() {
-    val api = RetroFitFactory().retrofitService()
+    private val api = RetroFitFactory().retrofitService()
     lateinit var idPokemon: String
-    var shiny: Boolean = false
+    private var shiny: Boolean = false
+
+    companion object {
+        private const val ID_KEY = "id"
+
+        fun getIntent(context: Context, id: String): Intent =
+            Intent(context, PokemonActivity::class.java).apply {
+                putExtra(ID_KEY, id)
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,17 +54,16 @@ class PokemonActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<Pokedex>, response: Response<Pokedex>) {
-                if (response.body() != null) {
-                    loadPokemon(response.body()!!)
-                }
-                else {
+                if (response.body() != null)
+                    response.body()?.let { loadPokemon(it) }
+                else
                     notFound()
-                }
             }
         })
     }
 
     private fun notFound() {
+        namePokemon.visibility = View.GONE
         val imageNotFound: ImageView = findViewById(R.id.notFoundPikachu)
         imageNotFound.visibility = View.VISIBLE
 
@@ -66,11 +76,13 @@ class PokemonActivity : AppCompatActivity() {
     }
 
     private fun setListViews(abilities: List<Ability>, moves: List<Move>) {
-        val adapterAbilities = ArrayAdapter<String>(this, R.layout.list_item, abilities.map { it.ability.toString() })
+        val adapterAbilities =
+            ArrayAdapter<String>(this, R.layout.list_item, abilities.map { it.ability.toString() })
         val listViewAbilities = findViewById<ListView>(R.id.abilities_list)
         listViewAbilities.adapter = adapterAbilities
 
-        val adapterMoves = ArrayAdapter<String>(this, R.layout.list_item, moves.map { it.move.toString() })
+        val adapterMoves =
+            ArrayAdapter<String>(this, R.layout.list_item, moves.map { it.move.toString() })
         val listViewMoves = findViewById<ListView>(R.id.moves_list)
         listViewMoves.adapter = adapterMoves
     }
@@ -84,11 +96,9 @@ class PokemonActivity : AppCompatActivity() {
         val ImageNormal: ImageView = findViewById(R.id.imageNormal)
 
         ImageNormal.setOnClickListener {
-            if(!shiny) {
+            if (!shiny) {
                 Glide.with(this).load(pokemon.imageshiny).into(ImageNormal)
-            }
-            else
-            {
+            } else {
                 Glide.with(this).load(pokemon.image).into(ImageNormal)
             }
             shiny = !shiny
@@ -97,7 +107,8 @@ class PokemonActivity : AppCompatActivity() {
         list_type.apply {
             setHasFixedSize(true)
             adapter = TypeListAdapter(pokemon.types)
-            layoutManager = LinearLayoutManager(this@PokemonActivity, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(this@PokemonActivity, LinearLayoutManager.HORIZONTAL, false)
         }
 
         setListViews(pokemon.abilities, pokemon.moves)

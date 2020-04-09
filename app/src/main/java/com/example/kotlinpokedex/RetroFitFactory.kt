@@ -6,10 +6,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 //criador da api, de fato
 
 class RetroFitFactory {
-    val URL: String = "https://react-pokedex-romaniaph.herokuapp.com"
+    private val URL: String = "https://react-pokedex-romaniaph.herokuapp.com"
 
     //configurações
-    val retrofitFactory = Retrofit.Builder() //construtor
+    private val retrofitFactory = Retrofit.Builder() //construtor
         .baseUrl(URL)
         .addConverterFactory(GsonConverterFactory.create()) //convertor pra Gson
         .build()

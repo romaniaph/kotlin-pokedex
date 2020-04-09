@@ -12,13 +12,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private var offsetGlobal: Int = 1
     private val pokemonArrayList = arrayListOf<Pokedex>()
-    val pokemonAdapter = PokemonListAdapter(pokemonArrayList)
-    var loading: Boolean = false
-    val api = RetroFitFactory().retrofitService()
+    private val pokemonAdapter = PokemonListAdapter(pokemonArrayList)
+    private var loading: Boolean = false
+    private val api = RetroFitFactory().retrofitService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,30 +27,24 @@ class MainActivity : AppCompatActivity() {
 
         getPokemons(offsetGlobal)
         setScrollRecyclerView()
+        pokemonList.addOnScrollStateChanged {}
+
+        search_button.setOnClickListener { searchPokemon() }
     }
 
-    fun searchPokemon(view: View) {
-        val bundle: Bundle = Bundle()
-        bundle.putString("id", search_bar.text.toString().toLowerCase().trim())
-        val intent: Intent = Intent(this,  PokemonActivity::class.java)
-        intent.putExtras(bundle)
+    private fun searchPokemon() {
+        val id = search_bar.text.toString().toLowerCase(Locale.getDefault()).trim()
+        val intent: Intent = PokemonActivity.getIntent(this, id)
         startActivity(intent)
         search_bar.text.clear()
     }
 
     private fun setScrollRecyclerView() {
-        val scrollListener = object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-
-                if (!recyclerView.canScrollVertically(1)) {
-                    addPokemons(offsetGlobal)
-                }
+        pokemonList.addOnScrollStateChanged {
+            if (!it.canScrollVertically(1)) {
+                addPokemons(offsetGlobal)
             }
         }
-
-        pokemonList.addOnScrollListener(scrollListener)
-
     }
 
     private fun addPokemons(offset: Int) {
@@ -70,9 +65,13 @@ class MainActivity : AppCompatActivity() {
                     call: Call<List<Pokedex>>,
                     response: Response<List<Pokedex>>
                 ) {
-                    pokemonArrayList!!.addAll(response.body()!!)
+                    response.body()?.let {
+                        pokemonArrayList.addAll(it)
+                    }
+
                     Toast.makeText(this@MainActivity, "Loading more pokémons...", Toast.LENGTH_LONG)
                         .show()
+
                     offsetGlobal = offset + 21
                     pokemonAdapter.notifyDataSetChanged()
                     loading = false
