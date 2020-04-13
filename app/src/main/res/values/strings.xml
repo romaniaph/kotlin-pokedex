@@ -8,5 +8,8 @@
     <string name="abilities">Abilities</string>
     <string name="not_found_image">Not found image</string>
     <string name="pokemon_image">Pokemon image</string>
-    <string name="moves">moves</string>
+    <string name="moves">Moves</string>
+    <string name="games">Games</string>
+    <string name="expand_games">Expand games</string>
+    <string name="expand_moves">Expand moves</string>
 </resources>

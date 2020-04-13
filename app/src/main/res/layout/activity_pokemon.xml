@@ -10,12 +10,11 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:expanded="true">
+        android:layout_height="60dp">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
             android:background="@color/azul_pokemon">
 
             <ImageView
@@ -34,11 +33,15 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:clipToPadding="true"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        android:overScrollMode="ifContentScrolls">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
             android:background="@color/pokemon_vermelho">
 
             <ImageView
@@ -84,13 +87,13 @@
 
             <ProgressBar
                 android:id="@+id/progressBarPokemon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:background="@drawable/circle_icon_item"
                 android:indeterminate="true"
                 android:indeterminateTint="@color/pokemon_vermelho"
                 android:indeterminateTintMode="src_atop"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/moves"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -146,10 +149,10 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:visibility="invisible"
+                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/abilities_list"
-                tools:visibility="visible" />
+                app:layout_constraintTop_toBottomOf="@+id/abilities_list" />
 
             <TextView
                 android:id="@+id/height"
@@ -179,14 +182,77 @@
             <ListView
                 android:id="@+id/moves_list"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
-
+                android:layout_height="0dp"
                 android:layout_marginTop="16dp"
+                android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/moves"
                 tools:background="@android:color/white"
-                tools:layout_height="100dp" />
+                tools:layout_height="100dp"
+                android:dividerHeight="1dp"/>
+
+            <ImageButton
+                android:id="@+id/expand_moves"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:background="@android:color/transparent"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/moves"
+                app:layout_constraintEnd_toEndOf="@+id/moves_list"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/moves"
+                app:layout_constraintTop_toTopOf="@+id/moves"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_expand_more"
+                tools:visibility="visible"
+                android:contentDescription="@string/expand_moves" />
+
+            <TextView
+                android:id="@+id/games"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/games"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/moves_list" />
+
+            <ImageButton
+                android:id="@+id/expand_games"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:background="@android:color/transparent"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/games"
+                app:layout_constraintEnd_toEndOf="@+id/games_list"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/moves"
+                app:layout_constraintTop_toTopOf="@+id/games"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_expand_more"
+                tools:visibility="visible"
+                android:contentDescription="@string/expand_games"/>
+
+            <ListView
+                android:id="@+id/games_list"
+                android:layout_width="300dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:scrollbars="none"
+                tools:background="@android:color/white"
+                tools:layout_height="100dp"
+                android:dividerHeight="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/games" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

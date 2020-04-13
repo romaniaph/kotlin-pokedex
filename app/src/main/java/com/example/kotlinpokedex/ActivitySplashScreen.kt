@@ -17,7 +17,7 @@ class ActivitySplashScreen : AppCompatActivity() {
         }, 3000)
     }
 
-    fun toMain() {
+    private fun toMain() {
         val intent: Intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()

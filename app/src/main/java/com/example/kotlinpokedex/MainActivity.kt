@@ -57,8 +57,8 @@ class MainActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<List<Pokedex>>, t: Throwable) {
                     Toast.makeText(this@MainActivity, "Loading... Please, wait", Toast.LENGTH_LONG)
                         .show()
-                    progressBar.visibility = View.INVISIBLE
-                    loading = false
+
+                    addPokemons(offsetGlobal)
                 }
 
                 override fun onResponse(
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<List<Pokedex>>, t: Throwable) {
                 Toast.makeText(this@MainActivity, "Loading... Please, wait", Toast.LENGTH_LONG).show()
-                d("n foi", t.toString())
+                getPokemons(offsetGlobal)
             }
 
             override fun onResponse(call: Call<List<Pokedex>>, response: Response<List<Pokedex>>) {
