@@ -54,7 +54,7 @@ class PokemonActivity : AppCompatActivity() {
         }
 
         searchPokemon()
-        setExpandClicks()
+        setClickListeners()
     }
 
     private fun searchPokemon() {
@@ -119,6 +119,8 @@ class PokemonActivity : AppCompatActivity() {
     }
 
     private fun loadPokemon(pokemon: Pokedex) {
+        idPokemon = pokemon.id.toString()
+
         namePokemon.text = "#${pokemon.id.toString()} ${pokemon.name.toString()}"
         width.text = "Weight: ${pokemon.weight.toString()}hg"
         height.text = "Height: ${pokemon.height.toString()}dm"
@@ -158,6 +160,11 @@ class PokemonActivity : AppCompatActivity() {
         expand_games.visibility = View.VISIBLE
 
         progressBarPokemon.visibility = View.GONE
+
+        next_button.visibility = View.VISIBLE
+
+        if (idPokemon != "1")
+            previous_buttton.visibility = View.VISIBLE
     }
 
     private fun expandMoves() {
@@ -196,13 +203,41 @@ class PokemonActivity : AppCompatActivity() {
         expandedGames = !expandedGames
     }
 
-    private fun setExpandClicks() {
+    private fun nextPokemon() {
+        val next: Int = idPokemon.toInt() + 1
+
+        var intent: Intent = PokemonActivity.getIntent(this, next.toString())
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        this.finish()
+    }
+
+    private fun previousPokemon() {
+        val next: Int = idPokemon.toInt() - 1
+
+        var intent: Intent = PokemonActivity.getIntent(this, next.toString())
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        this.finish()
+    }
+
+    private fun setClickListeners() {
         expand_moves.setOnClickListener {
             expandMoves()
         }
 
         expand_games.setOnClickListener {
             expandGames()
+        }
+
+        next_button.setOnClickListener {
+            nextPokemon()
+        }
+
+        previous_buttton.setOnClickListener {
+            previousPokemon()
         }
     }
 

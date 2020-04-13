@@ -41,8 +41,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dp"
-            android:background="@color/pokemon_vermelho">
+            android:background="@color/pokemon_vermelho"
+            android:paddingBottom="20dp">
 
             <ImageView
                 android:id="@+id/notFoundPikachu"
@@ -149,10 +149,10 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:visibility="invisible"
-                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/abilities_list" />
+                app:layout_constraintTop_toBottomOf="@+id/abilities_list"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/height"
@@ -184,13 +184,13 @@
                 android:layout_width="300dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
+                android:dividerHeight="1dp"
                 android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/moves"
                 tools:background="@android:color/white"
-                tools:layout_height="100dp"
-                android:dividerHeight="1dp"/>
+                tools:layout_height="100dp" />
 
             <ImageButton
                 android:id="@+id/expand_moves"
@@ -198,6 +198,7 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/expand_moves"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/moves"
                 app:layout_constraintEnd_toEndOf="@+id/moves_list"
@@ -206,8 +207,7 @@
                 app:layout_constraintTop_toTopOf="@+id/moves"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/ic_expand_more"
-                tools:visibility="visible"
-                android:contentDescription="@string/expand_moves" />
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/games"
@@ -219,10 +219,10 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:visibility="invisible"
-                tools:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/moves_list" />
+                app:layout_constraintTop_toBottomOf="@+id/moves_list"
+                tools:visibility="visible" />
 
             <ImageButton
                 android:id="@+id/expand_games"
@@ -230,6 +230,7 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/expand_games"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/games"
                 app:layout_constraintEnd_toEndOf="@+id/games_list"
@@ -238,21 +239,49 @@
                 app:layout_constraintTop_toTopOf="@+id/games"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/ic_expand_more"
-                tools:visibility="visible"
-                android:contentDescription="@string/expand_games"/>
+                tools:visibility="visible" />
 
             <ListView
                 android:id="@+id/games_list"
                 android:layout_width="300dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
-                android:scrollbars="none"
-                tools:background="@android:color/white"
-                tools:layout_height="100dp"
                 android:dividerHeight="1dp"
+                android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/games" />
+                app:layout_constraintTop_toBottomOf="@+id/games"
+                tools:background="@android:color/white"
+                tools:layout_height="100dp" />
+
+            <ImageButton
+                android:id="@+id/next_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/imageNormal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.36"
+                app:layout_constraintStart_toEndOf="@+id/imageNormal"
+                app:layout_constraintTop_toTopOf="@+id/imageNormal"
+                app:srcCompat="@drawable/ic_navigate_next"
+                tools:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/previous_buttton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/imageNormal"
+                app:layout_constraintEnd_toStartOf="@+id/imageNormal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageNormal"
+                app:srcCompat="@drawable/ic_navigate_before"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
