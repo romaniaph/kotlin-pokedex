@@ -1,5 +1,6 @@
 package com.example.kotlinpokedex
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -46,7 +47,7 @@ class PokemonActivity : AppCompatActivity() {
         setContentView(R.layout.activity_pokemon)
 
         //pega o id do pokémon do bundle
-        idPokemon = getIntent().getStringExtra("id")
+        idPokemon = intent.getStringExtra("id")
 
         easterEgg()
         searchPokemon()
@@ -67,10 +68,7 @@ class PokemonActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<Pokedex>, response: Response<Pokedex>) {
-                if (response.body() != null)
-                    response.body()?.let { loadPokemon(it) }
-                else
-                    notFound()
+                response.body()?.let { loadPokemon(it) } ?: notFound()
             }
         })
     }
@@ -88,29 +86,18 @@ class PokemonActivity : AppCompatActivity() {
         progressBarPokemon.visibility = View.GONE
     }
 
-    private fun setListViews(abilities: List<Ability>, moves: List<Move>, games: List<Game>) {
+    private fun setListView(listViewId: Int, contentList: List<String>) {
+        val adapter: ArrayAdapter<Any> = ArrayAdapter(this, R.layout.list_item, contentList)
 
-        //seta os adaptadores dos listviews
+        val listView: ListView = findViewById(listViewId)
+        listView.adapter = adapter
+    }
 
-        val adapterAbilities: ArrayAdapter<String> =
-            ArrayAdapter(this, R.layout.list_item, abilities.map { it.ability })
-        val listViewAbilities = findViewById<ListView>(R.id.abilities_list)
-        listViewAbilities.adapter = adapterAbilities
-
-        val adapterMoves: ArrayAdapter<String> =
-            ArrayAdapter(this, R.layout.list_item, moves.map { it.move })
-        val listViewMoves = findViewById<ListView>(R.id.moves_list)
-        listViewMoves.adapter = adapterMoves
-
-        val adapterGames: ArrayAdapter<String> =
-            ArrayAdapter(this, R.layout.list_item, games.map { it.game })
-        val listViewGames = findViewById<ListView>(R.id.games_list)
-        listViewGames.adapter = adapterGames
+    private fun setHeights(abilities: List<Ability>, moves: List<Move>, games: List<Game>) {
 
         // os maps abaixo setam a altura dos listviews (mostrar todos os items)
-
         abilities.map {
-            listViewAbilities.layoutParams.height += 36.dp
+            abilities_list.layoutParams.height += 36.dp
         }
 
         moves.map {
@@ -122,12 +109,13 @@ class PokemonActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun loadPokemon(pokemon: Pokedex) {
         idPokemon = pokemon.id.toString()
 
-        namePokemon.text = "#${pokemon.id.toString()} ${pokemon.name.toString()}"
-        width.text = "Weight: ${pokemon.weight.toString()}hg"
-        height.text = "Height: ${pokemon.height.toString()}dm"
+        namePokemon.text = "#${pokemon.id} ${pokemon.name}"
+        weight.text = "Weight: ${pokemon.weight}hg"
+        height.text = "Height: ${pokemon.height}dm"
 
         val image: ImageView = findViewById(R.id.imageNormal)
         Glide.with(this).load(pokemon.image).into(image)
@@ -149,8 +137,16 @@ class PokemonActivity : AppCompatActivity() {
                 LinearLayoutManager(this@PokemonActivity, LinearLayoutManager.HORIZONTAL, false)
         }
 
-        setListViews(pokemon.abilities, pokemon.moves, pokemon.games)
+        //seta o conteúdo das listviews
+        setListView(R.id.games_list, pokemon.games.map { it.game })
+        setListView(R.id.moves_list, pokemon.moves.map { it.move })
+        setListView(R.id.abilities_list, pokemon.abilities.map { it.ability })
 
+        //seta a altura que cada uma deve ter -> tem que fazer isso manualmente por conta do scroll
+        //isso também é feito pra lógica de expandir e esconder uma lista
+        setHeights(pokemon.abilities, pokemon.moves, pokemon.games)
+
+        //exibe o que for necessário
         showAll()
     }
 

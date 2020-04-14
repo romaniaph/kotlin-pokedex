@@ -59,29 +59,29 @@
             <TextView
                 android:id="@+id/namePokemon"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="#eeeeee"
+                android:layout_height="60dp"
                 android:fontFamily="@font/roboto_bold"
                 android:gravity="center"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 android:textSize="25sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Pikachu" />
+                app:layout_constraintTop_toBottomOf="@+id/imageNormal"
+                tools:text="#25 Pikachu" />
 
             <ImageView
                 android:id="@+id/imageNormal"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:background="@drawable/circle_icon_item"
                 android:contentDescription="@string/pokemon_image"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/list_type"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:src="@mipmap/pikachu_foreground"
                 tools:visibility="visible" />
 
@@ -111,7 +111,7 @@
                 tools:listitem="@layout/list_item_type" />
 
             <TextView
-                android:id="@+id/width"
+                android:id="@+id/weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -120,7 +120,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/height"
-                tools:text="WEIGHT"
+                tools:text="Weight: 60hg"
                 tools:visibility="visible" />
 
             <TextView
@@ -136,7 +136,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/width"
+                app:layout_constraintTop_toBottomOf="@+id/weight"
                 tools:visibility="visible" />
 
             <TextView
@@ -158,13 +158,13 @@
                 android:id="@+id/height"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="50dp"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageNormal"
-                tools:text="HEIGHT"
+                app:layout_constraintTop_toBottomOf="@+id/list_type"
+                tools:text="Height: 4.0dm"
                 tools:visibility="visible" />
 
             <ListView
@@ -259,6 +259,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/next_pokemon"
                 android:scaleType="fitCenter"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/imageNormal"
@@ -274,6 +275,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/previous_pokemon"
                 android:scaleType="fitCenter"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/imageNormal"

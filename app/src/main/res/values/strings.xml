@@ -12,4 +12,6 @@
     <string name="games">Games</string>
     <string name="expand_games">Expand games</string>
     <string name="expand_moves">Expand moves</string>
+    <string name="next_pokemon">next pokemon</string>
+    <string name="previous_pokemon">previous pokemon</string>
 </resources>
