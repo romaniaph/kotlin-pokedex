@@ -3,11 +3,9 @@ package com.example.kotlinpokedex
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log.d
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         getPokemons(offsetGlobal)
         setScrollRecyclerView()
-        pokemonList.addOnScrollStateChanged {}
 
         search_button.setOnClickListener { searchPokemon() }
     }
@@ -92,23 +89,22 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<List<Pokedex>>, response: Response<List<Pokedex>>) {
-                var start = pokemonArrayList.size
                 pokemonArrayList += response.body()!!
-                setRecycler(response.body()!!, start, pokemonArrayList.size)
+                setRecycler()
                 offsetGlobal = offset + 21
             }
         })
     }
 
 
-    private fun setRecycler(pokemon: List<Pokedex>, start: Int, count: Int) {
+    private fun setRecycler() {
         progressBar.visibility = View.INVISIBLE
 
         pokemonList.apply {
             setHasFixedSize(true)
 
             //seta um gerenciador de layout
-            //no caso, coloca como lineat
+            //no caso, coloca como linear
             layoutManager = LinearLayoutManager(this@MainActivity)
 
             //seta um adaptador de layout

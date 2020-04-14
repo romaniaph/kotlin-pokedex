@@ -5,27 +5,27 @@ import android.content.Intent
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_pokemon.*
-import kotlinx.android.synthetic.main.list_item_pokemon.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class PokemonActivity : AppCompatActivity() {
     private val api = RetroFitFactory().retrofitService()
-    lateinit var idPokemon: String
-    lateinit var listViewMoves: View
+    private lateinit var idPokemon: String
+
+    private lateinit var listViewMoves: View
     private var heightMoves: Int = 0
     private var expandedMoves: Boolean = false
-    lateinit var listViewGames: View
+
+    private lateinit var listViewGames: View
     private var heightGames: Int = 0
     private var expandedGames: Boolean = false
+
     private var shiny: Boolean = false
 
     //converte int pra DP (pra ajustar a altura do listview)
@@ -48,13 +48,16 @@ class PokemonActivity : AppCompatActivity() {
         //pega o id do pokémon do bundle
         idPokemon = getIntent().getStringExtra("id")
 
+        easterEgg()
+        searchPokemon()
+        setClickListeners()
+    }
+
+    private fun easterEgg() {
         if (idPokemon == "melo") {
             idPokemon = "54"
             Toast.makeText(this, "Salve melokkkkkkkk", Toast.LENGTH_LONG).show()
         }
-
-        searchPokemon()
-        setClickListeners()
     }
 
     private fun searchPokemon() {
@@ -89,17 +92,18 @@ class PokemonActivity : AppCompatActivity() {
 
         //seta os adaptadores dos listviews
 
-        val adapterAbilities =
-            ArrayAdapter<String>(this, R.layout.list_item, abilities.map { it.ability.toString() })
+        val adapterAbilities: ArrayAdapter<String> =
+            ArrayAdapter(this, R.layout.list_item, abilities.map { it.ability })
         val listViewAbilities = findViewById<ListView>(R.id.abilities_list)
         listViewAbilities.adapter = adapterAbilities
 
-        val adapterMoves =
-            ArrayAdapter<String>(this, R.layout.list_item, moves.map { it.move.toString() })
+        val adapterMoves: ArrayAdapter<String> =
+            ArrayAdapter(this, R.layout.list_item, moves.map { it.move })
         val listViewMoves = findViewById<ListView>(R.id.moves_list)
         listViewMoves.adapter = adapterMoves
 
-        val adapterGames = ArrayAdapter<String>(this, R.layout.list_item, games.map{ it.game.toString() })
+        val adapterGames: ArrayAdapter<String> =
+            ArrayAdapter(this, R.layout.list_item, games.map { it.game })
         val listViewGames = findViewById<ListView>(R.id.games_list)
         listViewGames.adapter = adapterGames
 
@@ -169,14 +173,13 @@ class PokemonActivity : AppCompatActivity() {
 
     private fun expandMoves() {
         listViewMoves = findViewById<ListView>(R.id.moves_list)
-        var lp = listViewMoves.layoutParams
+        val lp = listViewMoves.layoutParams
 
         if (expandedMoves) {
             lp.height = 0.dp
             listViewMoves.layoutParams = lp
             expand_moves.setImageResource(R.drawable.ic_expand_more)
-        }
-        else {
+        } else {
             lp.height = heightMoves
             listViewMoves.layoutParams = lp
             expand_moves.setImageResource(R.drawable.ic_expand_less)
@@ -187,14 +190,13 @@ class PokemonActivity : AppCompatActivity() {
 
     private fun expandGames() {
         listViewGames = findViewById(R.id.games_list)
-        var lp = listViewGames.layoutParams
+        val lp = listViewGames.layoutParams
 
-        if(expandedGames) {
+        if (expandedGames) {
             lp.height = 0.dp
             listViewGames.layoutParams = lp
             expand_games.setImageResource(R.drawable.ic_expand_more)
-        }
-        else {
+        } else {
             lp.height = heightGames
             listViewGames.layoutParams = lp
             expand_games.setImageResource(R.drawable.ic_expand_less)
@@ -206,7 +208,7 @@ class PokemonActivity : AppCompatActivity() {
     private fun nextPokemon() {
         val next: Int = idPokemon.toInt() + 1
 
-        var intent: Intent = PokemonActivity.getIntent(this, next.toString())
+        val intent: Intent = PokemonActivity.getIntent(this, next.toString())
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
@@ -216,7 +218,7 @@ class PokemonActivity : AppCompatActivity() {
     private fun previousPokemon() {
         val next: Int = idPokemon.toInt() - 1
 
-        var intent: Intent = PokemonActivity.getIntent(this, next.toString())
+        val intent: Intent = PokemonActivity.getIntent(this, next.toString())
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
