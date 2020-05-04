@@ -1,13 +1,15 @@
-package com.example.kotlinpokedex
+package com.example.kotlinpokedex.presentation
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kotlinpokedex.R
+import com.example.kotlinpokedex.data.model.Type
 import kotlinx.android.synthetic.main.list_item_type.view.*
 
-class TypeListAdapter(private var types: List<Type>) :
-    RecyclerView.Adapter<TypeListAdapter.ViewHolder>() {
+class TypeAdapter(private var types: List<Type>) :
+    RecyclerView.Adapter<TypeAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(type: Type) {
@@ -39,7 +41,7 @@ class TypeListAdapter(private var types: List<Type>) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): TypeListAdapter.ViewHolder {
+    ): ViewHolder {
         //infla com o carditem criado
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.list_item_type, parent, false)
@@ -51,7 +53,7 @@ class TypeListAdapter(private var types: List<Type>) :
     override fun getItemCount(): Int = types.size
 
 
-    override fun onBindViewHolder(holder: TypeListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(types[position])
     }
 }

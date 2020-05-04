@@ -1,4 +1,4 @@
-package com.example.kotlinpokedex
+package com.example.kotlinpokedex.data
 
 import androidx.recyclerview.widget.RecyclerView
 

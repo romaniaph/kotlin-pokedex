@@ -1,4 +1,4 @@
-package com.example.kotlinpokedex
+package com.example.kotlinpokedex.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,13 +10,19 @@ import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.kotlinpokedex.*
+import com.example.kotlinpokedex.data.ReactPokedexFactory
+import com.example.kotlinpokedex.data.model.Ability
+import com.example.kotlinpokedex.data.model.Game
+import com.example.kotlinpokedex.data.model.Move
+import com.example.kotlinpokedex.data.model.Pokemon
 import kotlinx.android.synthetic.main.activity_pokemon.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class PokemonActivity : AppCompatActivity() {
-    private val api = RetroFitFactory().retrofitService()
+    private val api = ReactPokedexFactory.service
     private lateinit var idPokemon: String
 
     private lateinit var listViewMoves: View
@@ -62,12 +68,12 @@ class PokemonActivity : AppCompatActivity() {
     }
 
     private fun searchPokemon() {
-        api.getPokemon(idPokemon).enqueue(object : Callback<Pokedex> {
-            override fun onFailure(call: Call<Pokedex>, t: Throwable) {
+        api.getPokemon(idPokemon).enqueue(object : Callback<Pokemon> {
+            override fun onFailure(call: Call<Pokemon>, t: Throwable) {
                 notFound()
             }
 
-            override fun onResponse(call: Call<Pokedex>, response: Response<Pokedex>) {
+            override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
                 response.body()?.let { loadPokemon(it) } ?: notFound()
             }
         })
@@ -87,7 +93,8 @@ class PokemonActivity : AppCompatActivity() {
     }
 
     private fun setListView(listViewId: Int, contentList: List<String>) {
-        val adapter: ArrayAdapter<Any> = ArrayAdapter(this, R.layout.list_item, contentList)
+        val adapter: ArrayAdapter<Any> = ArrayAdapter(this,
+            R.layout.list_item, contentList)
 
         val listView: ListView = findViewById(listViewId)
         listView.adapter = adapter
@@ -110,7 +117,7 @@ class PokemonActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun loadPokemon(pokemon: Pokedex) {
+    private fun loadPokemon(pokemon: Pokemon) {
         idPokemon = pokemon.id.toString()
 
         namePokemon.text = "#${pokemon.id} ${pokemon.name}"
@@ -132,7 +139,8 @@ class PokemonActivity : AppCompatActivity() {
 
         list_type.apply {
             setHasFixedSize(true)
-            adapter = TypeListAdapter(pokemon.types)
+            adapter =
+                TypeAdapter(pokemon.types)
             layoutManager =
                 LinearLayoutManager(this@PokemonActivity, LinearLayoutManager.HORIZONTAL, false)
         }
@@ -204,7 +212,11 @@ class PokemonActivity : AppCompatActivity() {
     private fun nextPokemon() {
         val next: Int = idPokemon.toInt() + 1
 
-        val intent: Intent = PokemonActivity.getIntent(this, next.toString())
+        val intent: Intent =
+            getIntent(
+                this,
+                next.toString()
+            )
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
@@ -214,7 +226,11 @@ class PokemonActivity : AppCompatActivity() {
     private fun previousPokemon() {
         val next: Int = idPokemon.toInt() - 1
 
-        val intent: Intent = PokemonActivity.getIntent(this, next.toString())
+        val intent: Intent =
+            getIntent(
+                this,
+                next.toString()
+            )
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)

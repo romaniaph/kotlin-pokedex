@@ -11,15 +11,15 @@
         android:roundIcon="@mipmap/pikachu_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-        <activity android:name=".ActivitySplashScreen">
+        <activity android:name=".presentation.ActivitySplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PokemonActivity" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".presentation.PokemonActivity" />
+        <activity android:name=".presentation.MainActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"
