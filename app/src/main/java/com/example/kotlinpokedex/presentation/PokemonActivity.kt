@@ -6,23 +6,20 @@ import android.content.Intent
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.kotlinpokedex.*
-import com.example.kotlinpokedex.data.ReactPokedexFactory
-import com.example.kotlinpokedex.data.model.Ability
-import com.example.kotlinpokedex.data.model.Game
-import com.example.kotlinpokedex.data.model.Move
-import com.example.kotlinpokedex.data.model.Pokemon
+import com.example.kotlinpokedex.data.model.*
 import kotlinx.android.synthetic.main.activity_pokemon.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class PokemonActivity : AppCompatActivity() {
-    private val api = ReactPokedexFactory.service
+    private lateinit var viewModel: PokemonViewModel
+
     private lateinit var idPokemon: String
 
     private lateinit var listViewMoves: View
@@ -52,11 +49,25 @@ class PokemonActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pokemon)
 
+        viewModel = ViewModelProviders.of(this).get(PokemonViewModel::class.java)
+
+        viewModel.liveDataLoading.observe(this, Observer {
+            it?.let {
+                if (!it) progressBarPokemon.visibility =
+                    View.INVISIBLE else progressBarPokemon.visibility = View.VISIBLE
+            }
+        })
+
+        viewModel.liveDataPokemon.observe(this, Observer {
+            it?.let {
+                loadPokemon(it)
+            } ?: notFound()
+        })
+
         //pega o id do pokémon do bundle
         idPokemon = intent.getStringExtra("id")
-
+        viewModel.getPokemon(idPokemon)
         easterEgg()
-        searchPokemon()
         setClickListeners()
     }
 
@@ -67,19 +78,9 @@ class PokemonActivity : AppCompatActivity() {
         }
     }
 
-    private fun searchPokemon() {
-        api.getPokemon(idPokemon).enqueue(object : Callback<Pokemon> {
-            override fun onFailure(call: Call<Pokemon>, t: Throwable) {
-                notFound()
-            }
-
-            override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
-                response.body()?.let { loadPokemon(it) } ?: notFound()
-            }
-        })
-    }
-
     private fun notFound() {
+        Log.d("not found", "not found")
+
         namePokemon.visibility = View.GONE
         val imageNotFound: ImageView = findViewById(R.id.notFoundPikachu)
         imageNotFound.visibility = View.VISIBLE
@@ -89,15 +90,24 @@ class PokemonActivity : AppCompatActivity() {
             .into(imageNotFound)
 
         Toast.makeText(this, "Pokemon not found! Please, search again...", Toast.LENGTH_LONG).show()
-        progressBarPokemon.visibility = View.GONE
     }
 
     private fun setListView(listViewId: Int, contentList: List<String>) {
-        val adapter: ArrayAdapter<Any> = ArrayAdapter(this,
-            R.layout.list_item, contentList)
+        val adapter: ArrayAdapter<Any> = ArrayAdapter(
+            this,
+            R.layout.list_item, contentList
+        )
 
         val listView: ListView = findViewById(listViewId)
         listView.adapter = adapter
+    }
+
+    private fun setRecyclerView(types: List<Type>) {
+        list_type.apply {
+            setHasFixedSize(true)
+            adapter = TypeAdapter(types)
+            layoutManager = LinearLayoutManager(this@PokemonActivity, LinearLayoutManager.HORIZONTAL, false)
+        }
     }
 
     private fun setHeights(abilities: List<Ability>, moves: List<Move>, games: List<Game>) {
@@ -137,13 +147,7 @@ class PokemonActivity : AppCompatActivity() {
             shiny = !shiny
         }
 
-        list_type.apply {
-            setHasFixedSize(true)
-            adapter =
-                TypeAdapter(pokemon.types)
-            layoutManager =
-                LinearLayoutManager(this@PokemonActivity, LinearLayoutManager.HORIZONTAL, false)
-        }
+        setRecyclerView(pokemon.types)
 
         //seta o conteúdo das listviews
         setListView(R.id.games_list, pokemon.games.map { it.game })
@@ -166,8 +170,6 @@ class PokemonActivity : AppCompatActivity() {
 
         games.visibility = View.VISIBLE
         expand_games.visibility = View.VISIBLE
-
-        progressBarPokemon.visibility = View.GONE
 
         next_button.visibility = View.VISIBLE
 

@@ -6,7 +6,7 @@
     android:layout_height="30dp"
     android:gravity="center"
     android:textColor="@android:color/white"
-    android:background="@drawable/type_eletric"
+    android:background="@drawable/type_electric"
     xmlns:tools="http://schemas.android.com/tools"
     tools:text="eletric"
     />

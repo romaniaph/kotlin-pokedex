@@ -4,24 +4,19 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinpokedex.*
-import com.example.kotlinpokedex.data.ReactPokedexFactory
 import com.example.kotlinpokedex.data.addOnScrollStateChanged
 import com.example.kotlinpokedex.data.model.Pokemon
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
-    private var offsetGlobal: Int = 1
     private lateinit var viewModel: PokemonViewModel
-//    private lateinit var pokemonAdapter: PokemonAdapter
-    private var loading: Boolean = false
+    private var pokemonList: ArrayList<Pokemon> = ArrayList()
+    private val pokemonAdapter: PokemonAdapter = PokemonAdapter(pokemonList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,19 +24,23 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(PokemonViewModel::class.java)
 
-        viewModel.liveData.observe(this, androidx.lifecycle.Observer {
-
+        viewModel.liveDataPokemonList.observe(this, androidx.lifecycle.Observer {
             it?.let {
-                with(pokemonList) {
-                    setHasFixedSize(true)
-                    layoutManager = LinearLayoutManager(this@MainActivity)
-                    adapter = PokemonAdapter(it)
-                }
-            }
+                pokemonList.addAll(it)
+                pokemonAdapter.notifyDataSetChanged()
+            } ?: viewModel.getPokemons()
         })
 
+        viewModel.liveDataLoading.observe(this, androidx.lifecycle.Observer {
+            it?.let {
+                if (!it)
+                    progressBar.visibility = View.GONE
+                else
+                    progressBar.visibility = View.VISIBLE
+            }
+        })
+        setRecyclerView()
         addPokemons()
-
         setScrollRecyclerView()
         search_button.setOnClickListener { searchPokemon() }
     }
@@ -58,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setScrollRecyclerView() {
-        pokemonList.addOnScrollStateChanged {
+        pokemonRecyclerView.addOnScrollStateChanged {
             if (!it.canScrollVertically(1)) {
                 addPokemons()
             }
@@ -66,11 +65,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addPokemons() {
-        progressBar.visibility = View.VISIBLE
-        viewModel.getPokemons(offsetGlobal)
-        offsetGlobal += 21
-        progressBar.visibility = View.GONE
+        viewModel.getPokemons()
+    }
 
-        pokemonList.adapter?.notifyDataSetChanged()
+    private fun setRecyclerView() {
+        with(pokemonRecyclerView) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = pokemonAdapter
+        }
     }
 }

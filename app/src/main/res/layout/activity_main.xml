@@ -65,7 +65,7 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pokemonList"
+        android:id="@+id/pokemonRecyclerView"
         android:layout_below="@id/appbar"
         android:layout_above="@id/search"
         android:layout_width="match_parent"

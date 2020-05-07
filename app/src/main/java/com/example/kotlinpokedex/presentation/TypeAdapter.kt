@@ -13,9 +13,9 @@ class TypeAdapter(private var types: List<Type>) :
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(type: Type) {
-            itemView.type_textview.text = type.type.toString()
+            itemView.type_textview.text = type.type
 
-            when (type.type.toString()) {
+            when (type.type) {
                 "poison" -> itemView.type_textview.setBackgroundResource(R.drawable.type_poison)
                 "water" -> itemView.type_textview.setBackgroundResource(R.drawable.type_water)
                 "rock" -> itemView.type_textview.setBackgroundResource(R.drawable.type_rock)
@@ -29,8 +29,7 @@ class TypeAdapter(private var types: List<Type>) :
                 "fire" -> itemView.type_textview.setBackgroundResource(R.drawable.type_fire)
                 "fighting" -> itemView.type_textview.setBackgroundResource(R.drawable.type_fighting)
                 "fairy" -> itemView.type_textview.setBackgroundResource(R.drawable.type_fairy)
-                "fire" -> itemView.type_textview.setBackgroundResource(R.drawable.type_fire)
-                "eletric" -> itemView.type_textview.setBackgroundResource(R.drawable.type_eletric)
+                "electric" -> itemView.type_textview.setBackgroundResource(R.drawable.type_electric)
                 "dragon" -> itemView.type_textview.setBackgroundResource(R.drawable.type_dragon)
                 "dark" -> itemView.type_textview.setBackgroundResource(R.drawable.type_dark)
                 "bug" -> itemView.type_textview.setBackgroundResource(R.drawable.type_bug)

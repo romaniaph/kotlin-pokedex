@@ -1,7 +1,6 @@
 package com.example.kotlinpokedex.presentation
 
-import android.util.Log
-import android.widget.Toast
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlinpokedex.data.ReactPokedexFactory
@@ -11,30 +10,60 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PokemonViewModel : ViewModel() {
-    val liveData: MutableLiveData<List<Pokemon>> = MutableLiveData();
+    val liveDataPokemonList: MutableLiveData<List<Pokemon>> = MutableLiveData()
+    var liveDataLoading: MutableLiveData<Boolean> = MutableLiveData()
+    var liveDataPokemon: MutableLiveData<Pokemon> = MutableLiveData()
+    private var offset: Int = 1
 
-    fun getPokemons(offset: Int) {
-        ReactPokedexFactory.service.getPokemons(offset.toString())
-            .enqueue(object : Callback<List<Pokemon>> {
-                override fun onResponse(
-                    call: Call<List<Pokemon>>,
-                    response: Response<List<Pokemon>>
-                ) {
-                    if (response.isSuccessful) {
-                        val mutableList = mutableListOf<Pokemon>()
+    fun getPokemons() {
 
-                        liveData.value?.let {
-                            mutableList.addAll(it.toMutableList())
-                        }
-                        mutableList.addAll(response.body()!!)
-                        liveData.value = mutableList
+        if (liveDataLoading.value == null) liveDataLoading.value = false
+
+        if (liveDataLoading.value == false) {
+            liveDataLoading.value = true
+
+            ReactPokedexFactory.service.getPokemons(offset.toString())
+                .enqueue(object : Callback<List<Pokemon>> {
+                    override fun onResponse(
+                        call: Call<List<Pokemon>>,
+                        response: Response<List<Pokemon>>
+                    ) {
+                        response.body()?.let { loadPokemonList(it) }
                     }
-                }
 
-                override fun onFailure(call: Call<List<Pokemon>>, t: Throwable) {
-                    TODO("Not yet implemented")
-                }
-            })
+                    override fun onFailure(call: Call<List<Pokemon>>, t: Throwable) {
+                        liveDataPokemonList.value = listOf()
+                        liveDataLoading.value = false
+                    }
+                })
+        }
+    }
+
+    private fun loadPokemonList(pokemons: List<Pokemon>) {
+        liveDataPokemonList.value = pokemons
+        offset += 21
+        liveDataLoading.value = false
+    }
+
+    fun getPokemon(id: String) {
+        liveDataLoading.value = true
+
+        ReactPokedexFactory.service.getPokemon(id.toString()).enqueue(object : Callback<Pokemon> {
+            override fun onFailure(call: Call<Pokemon>, t: Throwable) {
+                loadPokemon(null)
+            }
+
+            override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
+                response.body()?.let {
+                    loadPokemon(it)
+                } ?: loadPokemon(null)
+            }
+        })
+    }
+
+    private fun loadPokemon(pokemon: Pokemon?) {
+        liveDataPokemon.value = pokemon
+        liveDataLoading.value = false
     }
 
 }
