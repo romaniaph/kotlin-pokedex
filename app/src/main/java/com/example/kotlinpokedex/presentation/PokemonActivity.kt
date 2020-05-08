@@ -3,7 +3,6 @@ package com.example.kotlinpokedex.presentation
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.kotlinpokedex.*
+import com.example.kotlinpokedex.data.dp
 import com.example.kotlinpokedex.data.model.*
 import kotlinx.android.synthetic.main.activity_pokemon.*
 
@@ -31,10 +31,6 @@ class PokemonActivity : AppCompatActivity() {
     private var expandedGames: Boolean = false
 
     private var shiny: Boolean = false
-
-    //converte int pra DP (pra ajustar a altura do listview)
-    private val Int.dp: Int
-        get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
     companion object {
         private const val ID_KEY = "id"
@@ -65,7 +61,7 @@ class PokemonActivity : AppCompatActivity() {
         })
 
         //pega o id do pokémon do bundle
-        idPokemon = intent.getStringExtra("id")
+        idPokemon = intent.getStringExtra("id")!!
         viewModel.getPokemon(idPokemon)
         easterEgg()
         setClickListeners()
