@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.kotlinpokedex.*
 import com.example.kotlinpokedex.data.dp
 import com.example.kotlinpokedex.data.model.*
+import com.example.kotlinpokedex.data.repository.PokemonApiDataSource
 import kotlinx.android.synthetic.main.activity_pokemon.*
 
 class PokemonActivity : AppCompatActivity() {
@@ -45,7 +46,7 @@ class PokemonActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pokemon)
 
-        viewModel = ViewModelProviders.of(this).get(PokemonViewModel::class.java)
+        viewModel = PokemonViewModel.ViewModelFactory(PokemonApiDataSource()).create(PokemonViewModel::class.java)
 
         viewModel.liveDataLoading.observe(this, Observer {
             it?.let {

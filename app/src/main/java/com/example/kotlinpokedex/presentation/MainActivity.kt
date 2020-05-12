@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinpokedex.*
 import com.example.kotlinpokedex.data.addOnScrollStateChanged
 import com.example.kotlinpokedex.data.model.Pokemon
+import com.example.kotlinpokedex.data.repository.PokemonApiDataSource
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProviders.of(this).get(PokemonViewModel::class.java)
+        viewModel = PokemonViewModel.ViewModelFactory(PokemonApiDataSource()).create(PokemonViewModel::class.java)
 
         viewModel.liveDataPokemonList.observe(this, androidx.lifecycle.Observer {
             it?.let {

@@ -1,42 +1,62 @@
 package com.example.kotlinpokedex.presentation
 
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.kotlinpokedex.data.PokemonResult
 import com.example.kotlinpokedex.data.ReactPokedexFactory
 import com.example.kotlinpokedex.data.model.Pokemon
+import com.example.kotlinpokedex.data.repository.PokemonRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PokemonViewModel : ViewModel() {
+class PokemonViewModel(private val dataSource: PokemonRepository) : ViewModel() {
     val liveDataPokemonList: MutableLiveData<List<Pokemon>> = MutableLiveData()
     var liveDataLoading: MutableLiveData<Boolean> = MutableLiveData()
     var liveDataPokemon: MutableLiveData<Pokemon> = MutableLiveData()
     private var offset: Int = 1
 
-    fun getPokemons() {
+    class ViewModelFactory(private val dataSource: PokemonRepository) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(PokemonViewModel::class.java))
+                return PokemonViewModel(dataSource) as T
+            else
+                throw IllegalArgumentException("Unknown ViewModel Class")
+        }
+    }
 
+    fun getPokemons() {
         if (liveDataLoading.value == null) liveDataLoading.value = false
+        Log.d("Pokemon", "1")
 
         if (liveDataLoading.value == false) {
             liveDataLoading.value = true
+            Log.d("Pokemon", "2")
 
-            ReactPokedexFactory.service.getPokemons(offset.toString())
-                .enqueue(object : Callback<List<Pokemon>> {
-                    override fun onResponse(
-                        call: Call<List<Pokemon>>,
-                        response: Response<List<Pokemon>>
-                    ) {
-                        response.body()?.let { loadPokemonList(it) }
-                    }
+            dataSource.getPokemons(offset) {
+                Log.d("Pokemon", "3")
 
-                    override fun onFailure(call: Call<List<Pokemon>>, t: Throwable) {
-                        liveDataPokemonList.value = listOf()
-                        liveDataLoading.value = false
+                when (it) {
+                    is PokemonResult.Success -> {
+                        loadPokemonList(it.pokemons)
                     }
-                })
+                    is PokemonResult.Failed -> {
+                        retryGetPokemons()
+                    }
+                }
+            }
+
         }
+    }
+
+    private fun retryGetPokemons() {
+        liveDataPokemonList.value = listOf()
+        liveDataLoading.value = false
+        getPokemons()
     }
 
     private fun loadPokemonList(pokemons: List<Pokemon>) {
@@ -48,7 +68,7 @@ class PokemonViewModel : ViewModel() {
     fun getPokemon(id: String) {
         liveDataLoading.value = true
 
-        ReactPokedexFactory.service.getPokemon(id.toString()).enqueue(object : Callback<Pokemon> {
+        ReactPokedexFactory.service.getPokemon(id).enqueue(object : Callback<Pokemon> {
             override fun onFailure(call: Call<Pokemon>, t: Throwable) {
                 loadPokemon(null)
             }

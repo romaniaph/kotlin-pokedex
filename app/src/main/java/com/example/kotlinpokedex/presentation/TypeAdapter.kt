@@ -12,27 +12,31 @@ class TypeAdapter(private var types: List<Type>) :
     RecyclerView.Adapter<TypeAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        private fun setBackground(id: Int) {
+            itemView.type_textview.setBackgroundResource(id)
+        }
+
         fun bind(type: Type) {
             itemView.type_textview.text = type.type
 
             when (type.type) {
-                "poison" -> itemView.type_textview.setBackgroundResource(R.drawable.type_poison)
-                "water" -> itemView.type_textview.setBackgroundResource(R.drawable.type_water)
-                "rock" -> itemView.type_textview.setBackgroundResource(R.drawable.type_rock)
-                "psychic" -> itemView.type_textview.setBackgroundResource(R.drawable.type_psychic)
-                "normal" -> itemView.type_textview.setBackgroundResource(R.drawable.type_normal)
-                "ice" -> itemView.type_textview.setBackgroundResource(R.drawable.type_ice)
-                "ground" -> itemView.type_textview.setBackgroundResource(R.drawable.type_ground)
-                "grass" -> itemView.type_textview.setBackgroundResource(R.drawable.type_grass)
-                "ghost" -> itemView.type_textview.setBackgroundResource(R.drawable.type_ghost)
-                "flying" -> itemView.type_textview.setBackgroundResource(R.drawable.type_flying)
-                "fire" -> itemView.type_textview.setBackgroundResource(R.drawable.type_fire)
-                "fighting" -> itemView.type_textview.setBackgroundResource(R.drawable.type_fighting)
-                "fairy" -> itemView.type_textview.setBackgroundResource(R.drawable.type_fairy)
-                "electric" -> itemView.type_textview.setBackgroundResource(R.drawable.type_electric)
-                "dragon" -> itemView.type_textview.setBackgroundResource(R.drawable.type_dragon)
-                "dark" -> itemView.type_textview.setBackgroundResource(R.drawable.type_dark)
-                "bug" -> itemView.type_textview.setBackgroundResource(R.drawable.type_bug)
+                "poison" -> setBackground(R.drawable.type_poison)
+                "water" -> setBackground(R.drawable.type_water)
+                "rock" -> setBackground(R.drawable.type_rock)
+                "psychic" -> setBackground(R.drawable.type_psychic)
+                "normal" -> setBackground(R.drawable.type_normal)
+                "ice" -> setBackground(R.drawable.type_ice)
+                "ground" -> setBackground(R.drawable.type_ground)
+                "grass" -> setBackground(R.drawable.type_grass)
+                "ghost" -> setBackground(R.drawable.type_ghost)
+                "flying" -> setBackground(R.drawable.type_flying)
+                "fire" -> setBackground(R.drawable.type_fire)
+                "fighting" -> setBackground(R.drawable.type_fighting)
+                "fairy" -> setBackground(R.drawable.type_fairy)
+                "electric" -> setBackground(R.drawable.type_electric)
+                "dragon" -> setBackground(R.drawable.type_dragon)
+                "dark" -> setBackground(R.drawable.type_dark)
+                "bug" -> setBackground(R.drawable.type_bug)
             }
         }
     }
