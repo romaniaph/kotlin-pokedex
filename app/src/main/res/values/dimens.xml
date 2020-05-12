@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="list_pokemon_width">300dp</dimen>
+    <dimen name="list_pokemon_marginTop">16dp</dimen>
+    <dimen name="list_pokemon_expand_marginStart">8dp</dimen>
+    <dimen name="image_pokemon_dimensions">125dp</dimen>
+</resources>

@@ -71,8 +71,8 @@
 
             <ImageView
                 android:id="@+id/imageNormal"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/image_pokemon_dimensions"
+                android:layout_height="@dimen/image_pokemon_dimensions"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/circle_icon_item"
                 android:contentDescription="@string/pokemon_image"
@@ -142,7 +142,7 @@
                 android:id="@+id/moves"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/list_pokemon_marginTop"
                 android:fontFamily="@font/roboto_bold"
                 android:text="@string/moves"
                 android:textColor="@android:color/white"
@@ -168,9 +168,9 @@
 
             <ListView
                 android:id="@+id/abilities_list"
-                android:layout_width="300dp"
+                android:layout_width="@dimen/list_pokemon_width"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/list_pokemon_marginTop"
                 android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -180,9 +180,9 @@
 
             <ListView
                 android:id="@+id/moves_list"
-                android:layout_width="300dp"
+                android:layout_width="@dimen/list_pokemon_width"
                 android:layout_height="0dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/list_pokemon_marginTop"
                 android:dividerHeight="1dp"
                 android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -197,7 +197,7 @@
                 android:id="@+id/expand_moves"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/list_pokemon_expand_marginStart"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/expand_moves"
                 android:visibility="gone"
@@ -214,7 +214,7 @@
                 android:id="@+id/games"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/list_pokemon_marginTop"
                 android:fontFamily="@font/roboto_bold"
                 android:text="@string/games"
                 android:textColor="@android:color/white"
@@ -229,7 +229,7 @@
                 android:id="@+id/expand_games"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/list_pokemon_expand_marginStart"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/expand_games"
                 android:visibility="gone"
@@ -244,9 +244,9 @@
 
             <ListView
                 android:id="@+id/games_list"
-                android:layout_width="300dp"
+                android:layout_width="@dimen/list_pokemon_width"
                 android:layout_height="0dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/list_pokemon_marginTop"
                 android:dividerHeight="1dp"
                 android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
