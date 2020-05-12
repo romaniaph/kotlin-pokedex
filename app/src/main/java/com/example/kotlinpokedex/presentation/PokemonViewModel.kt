@@ -31,25 +31,16 @@ class PokemonViewModel(private val dataSource: PokemonRepository) : ViewModel() 
 
     fun getPokemons() {
         if (liveDataLoading.value == null) liveDataLoading.value = false
-        Log.d("Pokemon", "1")
 
         if (liveDataLoading.value == false) {
             liveDataLoading.value = true
-            Log.d("Pokemon", "2")
 
             dataSource.getPokemons(offset) {
-                Log.d("Pokemon", "3")
 
-                when (it) {
-                    is PokemonResult.Success -> {
-                        loadPokemonList(it.pokemons)
-                    }
-                    is PokemonResult.Failed -> {
-                        retryGetPokemons()
-                    }
-                }
+                it?.let {
+                    loadPokemonList(it)
+                } ?: retryGetPokemons()
             }
-
         }
     }
 
@@ -68,17 +59,9 @@ class PokemonViewModel(private val dataSource: PokemonRepository) : ViewModel() 
     fun getPokemon(id: String) {
         liveDataLoading.value = true
 
-        ReactPokedexFactory.service.getPokemon(id).enqueue(object : Callback<Pokemon> {
-            override fun onFailure(call: Call<Pokemon>, t: Throwable) {
-                loadPokemon(null)
-            }
-
-            override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
-                response.body()?.let {
-                    loadPokemon(it)
-                } ?: loadPokemon(null)
-            }
-        })
+        dataSource.getPokemon(id) {
+            loadPokemon(it)
+        }
     }
 
     private fun loadPokemon(pokemon: Pokemon?) {

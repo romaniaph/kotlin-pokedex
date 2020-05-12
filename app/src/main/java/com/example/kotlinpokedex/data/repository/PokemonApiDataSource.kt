@@ -9,7 +9,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PokemonApiDataSource : PokemonRepository {
-    override fun getPokemons(offset: Int, pokemonResultCallback: (result: PokemonResult) -> Unit) {
+    override fun getPokemons(offset: Int, pokemonResultCallback: (pokemon: List<Pokemon>?) -> Unit) {
         ReactPokedexFactory.service.getPokemons(offset.toString())
             .enqueue(object : Callback<List<Pokemon>> {
                 override fun onResponse(
@@ -17,13 +17,26 @@ class PokemonApiDataSource : PokemonRepository {
                     response: Response<List<Pokemon>>
                 ) {
                     response.body()?.let {
-                        pokemonResultCallback(PokemonResult.Success(it))
-                    } ?: pokemonResultCallback(PokemonResult.Failed())
+                        pokemonResultCallback(it)
+                    } ?: pokemonResultCallback(null)
                 }
 
                 override fun onFailure(call: Call<List<Pokemon>>, t: Throwable) {
-                    pokemonResultCallback(PokemonResult.Failed())
+                    pokemonResultCallback(null)
                 }
             })
     }
+
+    override fun getPokemon(id: String, pokemonResultCallback: (pokemon: Pokemon?) -> Unit) {
+        ReactPokedexFactory.service.getPokemon(id).enqueue(object : Callback<Pokemon> {
+            override fun onFailure(call: Call<Pokemon>, t: Throwable) {
+                pokemonResultCallback(null)
+            }
+
+            override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
+                pokemonResultCallback(response.body())
+            }
+        })
+    }
 }
+
