@@ -10,7 +10,6 @@ data class Pokemon (
     @SerializedName("weight") val weight: Double,
     @SerializedName("image") val image: String,
     @SerializedName("imageShiny") val imageShiny: String,
-    @SerializedName("imageshiny") val imageshiny: String,
     @SerializedName("types") val types: List<Type>,
     @SerializedName("games") val games: List<Game>,
     @SerializedName("moves") val moves: List<Move>

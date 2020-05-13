@@ -1,18 +1,11 @@
 package com.example.kotlinpokedex.presentation
 
-
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlinpokedex.data.PokemonResult
-import com.example.kotlinpokedex.data.ReactPokedexFactory
 import com.example.kotlinpokedex.data.model.Pokemon
 import com.example.kotlinpokedex.data.repository.PokemonRepository
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class PokemonViewModel(private val dataSource: PokemonRepository) : ViewModel() {
     val liveDataPokemonList: MutableLiveData<List<Pokemon>> = MutableLiveData()
@@ -36,10 +29,10 @@ class PokemonViewModel(private val dataSource: PokemonRepository) : ViewModel() 
             liveDataLoading.value = true
 
             dataSource.getPokemons(offset) {
-
-                it?.let {
-                    loadPokemonList(it)
-                } ?: retryGetPokemons()
+                when (it) {
+                    is PokemonResult.GetPokemonsSuccess -> loadPokemonList(it.pokemons)
+                    is PokemonResult.Failed -> retryGetPokemons()
+                }
             }
         }
     }
@@ -50,7 +43,7 @@ class PokemonViewModel(private val dataSource: PokemonRepository) : ViewModel() 
         getPokemons()
     }
 
-    private fun loadPokemonList(pokemons: List<Pokemon>) {
+    private fun loadPokemonList(pokemons: List<Pokemon>?) {
         liveDataPokemonList.value = pokemons
         offset += 21
         liveDataLoading.value = false
@@ -60,7 +53,10 @@ class PokemonViewModel(private val dataSource: PokemonRepository) : ViewModel() 
         liveDataLoading.value = true
 
         dataSource.getPokemon(id) {
-            loadPokemon(it)
+            when (it) {
+                is PokemonResult.GetPokemonSuccess -> loadPokemon(it.pokemon)
+                is PokemonResult.Failed -> loadPokemon(null)
+            }
         }
     }
 

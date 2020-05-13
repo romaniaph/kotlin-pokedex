@@ -9,7 +9,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PokemonApiDataSource : PokemonRepository {
-    override fun getPokemons(offset: Int, pokemonResultCallback: (pokemon: List<Pokemon>?) -> Unit) {
+    override fun getPokemons(
+        offset: Int,
+        pokemonResultCallback: (pokemon: PokemonResult) -> Unit
+    ) {
         ReactPokedexFactory.service.getPokemons(offset.toString())
             .enqueue(object : Callback<List<Pokemon>> {
                 override fun onResponse(
@@ -17,24 +20,26 @@ class PokemonApiDataSource : PokemonRepository {
                     response: Response<List<Pokemon>>
                 ) {
                     response.body()?.let {
-                        pokemonResultCallback(it)
-                    } ?: pokemonResultCallback(null)
+                        pokemonResultCallback(PokemonResult.GetPokemonsSuccess(it))
+                    } ?: pokemonResultCallback(PokemonResult.Failed())
                 }
 
                 override fun onFailure(call: Call<List<Pokemon>>, t: Throwable) {
-                    pokemonResultCallback(null)
+                    pokemonResultCallback(PokemonResult.Failed())
                 }
             })
     }
 
-    override fun getPokemon(id: String, pokemonResultCallback: (pokemon: Pokemon?) -> Unit) {
+    override fun getPokemon(id: String, pokemonResultCallback: (pokemon: PokemonResult) -> Unit) {
         ReactPokedexFactory.service.getPokemon(id).enqueue(object : Callback<Pokemon> {
             override fun onFailure(call: Call<Pokemon>, t: Throwable) {
-                pokemonResultCallback(null)
+                pokemonResultCallback(PokemonResult.Failed())
             }
 
             override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
-                pokemonResultCallback(response.body())
+                response.body()?.let {
+                    pokemonResultCallback(PokemonResult.GetPokemonSuccess(it))
+                } ?: pokemonResultCallback(PokemonResult.Failed())
             }
         })
     }

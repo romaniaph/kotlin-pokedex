@@ -137,7 +137,7 @@ class PokemonActivity : AppCompatActivity() {
 
         image.setOnClickListener {
             if (!shiny) {
-                Glide.with(this).load(pokemon.imageshiny).into(image)
+                Glide.with(this).load(pokemon.imageShiny).into(image)
             } else {
                 Glide.with(this).load(pokemon.image).into(image)
             }
